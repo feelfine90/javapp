@@ -1,14 +1,12 @@
 package com.example.dao;
 
 import com.example.model.Patient;
+import com.example.exception.DataAccessException; // Added import
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
+// import static org.junit.jupiter.api.Assertions.assertThrows; // Uncomment if specific exception throwing tests are added
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,29 +14,24 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PatientDAOImplTest {
 
     private PatientDAOImpl patientDAO;
-    private Connection connection;
+    // Connection management is handled within PatientDAOImpl now
 
     @BeforeEach
-    void setUp() throws SQLException {
-        // Using a unique DB for each test run to ensure isolation, though H2 in-mem is usually clean.
-        // For PatientDAOImpl, it creates its own connection, so this is more for direct manipulation if needed.
-        // The PatientDAOImpl constructor will establish its own connection and setup the table.
+    void setUp() throws DataAccessException { // Updated signature
+        // PatientDAOImpl constructor now throws DataAccessException
         patientDAO = new PatientDAOImpl(); 
     }
 
     @AfterEach
-    void tearDown() throws SQLException {
-        // The PatientDAOImpl has a shutdown hook for its connection.
-        // If we were managing connection here, we'd close it.
-        // For H2 in-memory, DB_CLOSE_DELAY=-1 keeps it alive, 
-        // but a new PatientDAOImpl() means a fresh start if the DB name is constant.
-        // To ensure total cleanup for external test DBs or more complex scenarios,
-        // one might drop the table or close the connection explicitly if DAO provided a method.
-        patientDAO.closeConnection(); // Ensure connection is closed after each test
+    void tearDown() throws DataAccessException { // Updated signature
+        // Ensure connection is closed after each test
+        if (patientDAO != null) {
+            patientDAO.closeConnection(); 
+        }
     }
 
     @Test
-    void testAddAndGetPatient() {
+    void testAddAndGetPatient() throws DataAccessException { // Updated signature
         Patient patient = new Patient(1L, "John Doe", 30, "Flu");
         patientDAO.addPatient(patient);
 
@@ -50,7 +43,7 @@ public class PatientDAOImplTest {
     }
 
     @Test
-    void testGetAllPatients() {
+    void testGetAllPatients() throws DataAccessException { // Updated signature
         Patient patient1 = new Patient(1L, "John Doe", 30, "Flu");
         Patient patient2 = new Patient(2L, "Jane Smith", 25, "Cold");
         patientDAO.addPatient(patient1);
@@ -62,7 +55,7 @@ public class PatientDAOImplTest {
     }
 
     @Test
-    void testUpdatePatient() {
+    void testUpdatePatient() throws DataAccessException { // Updated signature
         Patient patient = new Patient(1L, "John Doe", 30, "Flu");
         patientDAO.addPatient(patient);
 
@@ -79,7 +72,7 @@ public class PatientDAOImplTest {
     }
 
     @Test
-    void testDeletePatient() {
+    void testDeletePatient() throws DataAccessException { // Updated signature
         Patient patient = new Patient(1L, "John Doe", 30, "Flu");
         patientDAO.addPatient(patient);
 
@@ -91,9 +84,20 @@ public class PatientDAOImplTest {
         assertNull(deletedPatient, "Patient should not exist after deletion");
     }
 
-     @Test
-    void testGetPatientById_NotFound() {
+    @Test
+    void testGetPatientById_NotFound() throws DataAccessException { // Updated signature
         Patient retrievedPatient = patientDAO.getPatientById(99L); // Assuming 99L does not exist
         assertNull(retrievedPatient);
     }
+
+    // Example of how you might test for DataAccessException if you could reliably cause it
+    // @Test
+    // void testOperationOnClosedConnection() throws DataAccessException {
+    //     patientDAO.closeConnection(); // Close the connection
+    //     assertThrows(DataAccessException.class, () -> {
+    //         patientDAO.addPatient(new Patient(5L, "Ghost", 0, "None"));
+    //     });
+    //     // Re-initialize for other tests or ensure @AfterEach handles this state
+    //     patientDAO = new PatientDAOImpl(); // Or ensure tests are independent
+    // }
 }
