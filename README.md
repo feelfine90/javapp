@@ -1,6 +1,6 @@
 # Patient Management System (ABM)
 
-This is a simple command-line application for managing patient records (Alta, Baja, Modificación - Create, Read, Update, Delete).
+This is a simple graphical application for managing patient records (Alta, Baja, Modificación - Create, Read, Update, Delete) using a Swing UI.
 
 ## Prerequisites
 
@@ -29,20 +29,22 @@ This is a simple command-line application for managing patient records (Alta, Ba
         ```
     *   On Windows (Command Prompt - explicit list for reliability):
         ```bash
-        javac -d out -cp "src;lib\*" src\com\example\model\Patient.java src\com\example\dao\PatientDAO.java src\com\example\dao\PatientDAOImpl.java src\com\example\service\PatientService.java src\com\example\ui\Main.java src\com\example\exception\DataAccessException.java src\com\example\exception\PatientManagementException.java src\com\example\exception\PatientNotFoundException.java src\com\example\exception\ServiceException.java
+        javac -d out -cp "src;lib\*" src\com\example\model\Patient.java src\com\example\dao\PatientDAO.java src\com\example\dao\PatientDAOImpl.java src\com\example\service\PatientService.java src\com\example\ui\Main.java src\com\example\ui\PatientManagementApp.java src\com\example\exception\DataAccessException.java src\com\example\exception\PatientManagementException.java src\com\example\exception\PatientNotFoundException.java src\com\example\exception\ServiceException.java
         ```
 
 ## Running the Application
 
-1.  After successful compilation, run the application using the following command from the project root:
+1.  Ensure you have followed the "Setup" and "Compilation" steps.
+2.  Run the application using the following command from the project root:
     *   On Linux/macOS:
         ```bash
         java -cp "out:lib/*" com.example.ui.Main
         ```
     *   On Windows:
         ```bash
-        java -cp "out;lib\*" com.example.ui.Main
+        java -cp "out;lib/*" com.example.ui.Main
         ```
+3.  This will launch the Patient Management System graphical user interface. You can interact with the application using the buttons and input fields provided in the window.
 
 ## Running Tests (using JUnit 5 Console Launcher)
 
@@ -53,7 +55,7 @@ This is a simple command-line application for managing patient records (Alta, Ba
         ```
     *   On Windows (Command Prompt - explicit list for reliability):
         ```bash
-        javac -d out -cp "src;test;lib\*" src\com\example\model\Patient.java src\com\example\dao\PatientDAO.java src\com\example\dao\PatientDAOImpl.java src\com\example\exception\DataAccessException.java src\com\example\exception\PatientManagementException.java src\com\example\exception\PatientNotFoundException.java src\com\example\exception\ServiceException.java test\com\example\dao\PatientDAOImplTest.java
+        javac -d out -cp "src;test;lib\*" src\com\example\model\Patient.java src\com\example\dao\PatientDAO.java src\com\example\dao\PatientDAOImpl.java src\com\example\service\PatientService.java src\com\example\ui\Main.java src\com\example\ui\PatientManagementApp.java src\com\example\exception\DataAccessException.java src\com\example\exception\PatientManagementException.java src\com\example\exception\PatientNotFoundException.java src\com\example\exception\ServiceException.java test\com\example\dao\PatientDAOImplTest.java
         ```
 2.  Run the tests using the JUnit Console Launcher (ensure `junit-platform-console-standalone-1.x.x.jar` is in `lib`):
     *   On Linux/macOS:
@@ -62,7 +64,7 @@ This is a simple command-line application for managing patient records (Alta, Ba
         ```
     *   On Windows:
         ```bash
-        java -jar lib\junit-platform-console-standalone-1.x.x.jar -cp "out;lib\*" --scan-classpath
+        java -jar lib\junit-platform-console-standalone-1.x.x.jar -cp "out;lib/*" --scan-classpath
         ```
 
-This README provides instructions for setup, compilation, running the application, and executing tests from the command line.
+This README provides instructions for setup, compilation, running the graphical application, and executing tests from the command line.
